@@ -1,5 +1,8 @@
 package game;
 
+import game.board.Action;
+import game.board.Board;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -173,7 +176,15 @@ public class Game extends JPanel implements MouseListener{
 	 */
 	private void attemptMove(int x, int y, int x2, int y2) {
 		if (isLegal(x, y, x2, y2) && toJumpX == -1 && toJumpY == -1) {
-			Board.move(x, y, x2, y2, -1, -1);
+			Action.move(x, y, x2, y2, -1, -1);
+			
+			char team = Character.toLowerCase(Board.currentBoard[y2][x2]);
+			char otherTeam = (team == 'r') ? 'w' : 'r';
+			
+			for (int i = -2; i < 3; i+=4)
+				for (int i2 = -2; i2 < 3; i2+=4)
+					turn = (isLegal(x2, y2, x2 + i2, y2 + i2)) ? team : otherTeam;
+			
 		} else if (isLegal(x, y, x2, y2)) {
 			char toJumpChecker = Character.toLowerCase(Board.currentBoard[toJumpY][toJumpX]);
 					
@@ -183,7 +194,7 @@ public class Game extends JPanel implements MouseListener{
 				updateScore('r');
 			}
 			
-			Board.move(x, y, x2, y2, toJumpX, toJumpY);
+			Action.move(x, y, x2, y2, toJumpX, toJumpY);
 			
 			toJumpX = -1;
 			toJumpY = -1;
@@ -199,7 +210,6 @@ public class Game extends JPanel implements MouseListener{
 			System.out.println("No checker selected!");
 			return false;
 		}
-			
 		
 		boolean isLegal = false;
 		boolean isKing = false;
@@ -244,9 +254,7 @@ public class Game extends JPanel implements MouseListener{
 		} else {
 			System.out.println("Movement failed.");
 		}
-		
-		turn = otherTeam;
-		
+			
 		return isLegal;
 	}
 
