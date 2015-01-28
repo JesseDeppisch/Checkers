@@ -1,7 +1,8 @@
 package game;
 
-import game.board.Action;
 import game.board.Board;
+import game.board.Jump;
+import game.board.Movement;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -146,7 +147,7 @@ public class Game extends JPanel implements MouseListener{
 	 * Used to update the score (increments of 1)
 	 * @param team to increase score of
 	 */
-	public void updateScore(char team) {
+	public static void updateScore(char team) {
 		if (team == 'r')
 			scoreRed += 1;
 		else if (team == 'w')
@@ -168,94 +169,35 @@ public class Game extends JPanel implements MouseListener{
 	}
 	
 	/**
-	 * Checks the legality of the move, then makes it if it's legal
+	 * Attempts to make the move if it's legal
 	 * @param x moving from 
 	 * @param y moving from 
 	 * @param x2 moving to
 	 * @param y2 moving to
 	 */
 	private void attemptMove(int x, int y, int x2, int y2) {
-		if (isLegal(x, y, x2, y2) && toJumpX == -1 && toJumpY == -1) {
-			Action.move(x, y, x2, y2, -1, -1);
-			
-			char team = Character.toLowerCase(Board.currentBoard[y2][x2]);
-			char otherTeam = (team == 'r') ? 'w' : 'r';
-			
-			for (int i = -2; i < 3; i+=4)
-				for (int i2 = -2; i2 < 3; i2+=4)
-					turn = (isLegal(x2, y2, x2 + i2, y2 + i2)) ? team : otherTeam;
-			
-		} else if (isLegal(x, y, x2, y2)) {
-			char toJumpChecker = Character.toLowerCase(Board.currentBoard[toJumpY][toJumpX]);
-					
-			if (toJumpChecker == 'r') {
-				updateScore('w');
-			} else if (toJumpChecker == 'w') {
-				updateScore('r');
-			}
-			
-			Action.move(x, y, x2, y2, toJumpX, toJumpY);
-			
-			toJumpX = -1;
-			toJumpY = -1;
-		}
-	}
-	
-	/**
-	 * Checks if the move is legal
-	 */
-	public boolean isLegal(int x, int y, int x2, int y2) {
-		// Quit checking if blank piece selected
-		if (Board.currentBoard[y][x] == ' ') {
-			System.out.println("No checker selected!");
-			return false;
-		}
-		
-		boolean isLegal = false;
-		boolean isKing = false;
-		
-		if (Board.currentBoard[y][x] == 'R' || Board.currentBoard[y][x] == 'W')
-			isKing = true;
-		
-		char team = Character.toLowerCase(Board.currentBoard[y][x]);
-		char otherTeam = (team == 'r') ? 'w' : 'r';
-		
-		// Quit checking if it's not the team's turn
-		if (Board.currentBoard[y][x] != turn) {
-			System.out.println("It's not that team's turn!");
-			return false;
-		}
-		
 		int deltaX = x2 - x;
 		int deltaY = y2 - y;
 		
-		int modifier = (team == 'r') ? 1 : -1;
-		int modDeltaY = deltaY * modifier;
-	
-		// Checking if jump
-		
+		// Basic preliminary checks for specific actions
 		if (Math.abs(deltaX) == 2 && Math.abs(deltaY) == 2) {
-			
-			if (isKing && Character.toLowerCase(Board.currentBoard[y+(deltaY/2)][x+(deltaX/2)]) == otherTeam) {
-				isLegal = true;
-				toJumpX = x+(deltaX/2);
-				toJumpY = y+(deltaY/2);
-			} else if (Character.toLowerCase(Board.currentBoard[y+modifier][x+(deltaX/2)]) == otherTeam) {
-				
-				isLegal = true;
-				toJumpX = x+(deltaX/2);
-				toJumpY = y+(modifier);
-			}
-		} else if (Math.abs(deltaX) == 1) { // checking if regular move
-			if (isKing && Math.abs(deltaY) == 1)
-				isLegal = true;
-			else if (!isKing && modDeltaY == 1)
-				isLegal = true;
-		} else {
-			System.out.println("Movement failed.");
+			new Jump(x, y, x2, y2);
+		} else if (Math.abs(deltaX) == 1) {
+			new Movement(x, y, x2, y2);
 		}
-			
-		return isLegal;
+		
+		// score is updated in the action class (so no need to put that code here)
+		
+		// TODO - check if another jump is possible || ALSO DOING THIS IN BOARD class, so probably keep there (under move())
+		//	else
+	}
+	
+	public static void setTurn(char t) {
+		turn = t;
+	}
+	
+	public static char getTurn() {
+		return turn;
 	}
 
 	public void mouseEntered(MouseEvent arg0) {
