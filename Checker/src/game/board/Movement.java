@@ -13,6 +13,9 @@ public class Movement extends Action{
 				return true;
 			} else if (!isKing && modDeltaY == 1) {
 				return true;
+			} else {
+				System.out.println("deltaY: " + deltaY);
+				System.out.println("modDeltaY: " + modDeltaY);
 			}
 		} 
 		return false;

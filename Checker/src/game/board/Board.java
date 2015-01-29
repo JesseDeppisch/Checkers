@@ -60,19 +60,38 @@ public class Board {
 		
 		if (jumpedX != -1 & jumpedY != -1) {
 			removeChecker(jumpedX, jumpedY);
+			
+			// Checks if another move is possible, and if not, changes the turn
+			boolean canJumpAgain = false;
+			
+			for (int i = -2; i < 3; i+=2) {
+				for (int i2 = -2; i2 < 3; i2+=2) {
+					//if ((x2 + i) > 0 && (x2 + i) < 8 && (y2 + i2) > 0 && (y2 + i2) < 8) {
+						if (new Jump(x2, y2, x2 + i, y2 + i2, false).isSuccessful()) {
+							canJumpAgain = true;
+							Game.highlight(x2 + i, y2 + i2);
+							break;
+						}
+					//}
+				}
+			}
+			
+			if (!canJumpAgain) {
+				Game.setJumpLock(false);
+				Game.setTurn((Game.getTurn() == 'r') ? 'w' : 'r');
+			} else {
+				System.out.println("Can jump again!");
+				Game.setJumpLock(true);
+			}
+		} else {
+			Game.setJumpLock(false);
+			Game.setTurn((Game.getTurn() == 'r') ? 'w' : 'r');
 		}
 		
 		
-		// Checks if another jump is possible, and if not, changes turn
-		for (int i = -2; i < 3; i+=2)
-			for (int i2 = -2; i2 < 3; i2+=2)
-				if ((x2 + i2) > 0 && (x2 + i2) < 8 && (y2 + i) > 0 && (y2 + i) < 8) {
-					if (!new Jump(x2, y2, x2 + i2, y2 + i, false).isSuccessful()) {
-						Game.setTurn((Game.getTurn() == 'r') ? 'w' : 'r');
-					} else {
-						System.out.println("ANOTHER MOVE IS POSSIBLE");
-					}
-				}
+		
+		
+		
 	}
 	
 	private static void removeChecker(int x, int y) {

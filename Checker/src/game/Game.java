@@ -37,6 +37,10 @@ public class Game extends JPanel implements MouseListener{
 	
 	private static int[] toHighlight;
 	
+	private static boolean jumpLock;
+	
+	private static boolean highlightDebug;
+	
 	/**
 	 * Main method, do init stuff here
 	 */
@@ -76,6 +80,10 @@ public class Game extends JPanel implements MouseListener{
 		
 		toHighlight = new int[2];
 		
+		jumpLock = false;
+		
+		highlightDebug = false;
+		
 		// Init game loop
 		while (true) {
 			game.repaint();
@@ -106,17 +114,23 @@ public class Game extends JPanel implements MouseListener{
 		
 		if (turn == 'r') {
 			g.setColor(Color.RED);
-			g.drawString("Turn: RED", 370, 508);
+			if (!jumpLock)
+				g.drawString("Turn: RED", 370, 508);
+			else
+				g.drawString("Turn: RED - JUMP", 370, 508);
 		} else if (turn == 'w') {
 			g.setColor(Color.GRAY);
-			g.drawString("Turn: WHITE", 370, 508);
+			if (!jumpLock)
+				g.drawString("Turn: WHITE", 370, 508);
+			else
+				g.drawString("Turn: WHITE - JUMP", 370, 508);
 		}
 		
 		g.setColor(Color.BLACK);
 		
 		// Drawing the highlights
 		
-		if (toHighlight[0] != -1 && toHighlight[1] != -1) {
+		if (toHighlight[0] != -1 && toHighlight[1] != -1 && highlightDebug) {
 			Graphics2D g2 = (Graphics2D)g;
 			g2.setColor(Color.YELLOW);
 			g2.setStroke(new BasicStroke(3));
@@ -206,7 +220,7 @@ public class Game extends JPanel implements MouseListener{
 		// Basic preliminary checks for specific actions
 		if (Math.abs(deltaX) == 2 && Math.abs(deltaY) == 2) {
 			new Jump(x, y, x2, y2, true);
-		} else if (Math.abs(deltaX) == 1) {
+		} else if (Math.abs(deltaX) == 1 && !jumpLock) {
 			new Movement(x, y, x2, y2, true);
 		}
 		
@@ -238,6 +252,11 @@ public class Game extends JPanel implements MouseListener{
 
 	public void mouseReleased(MouseEvent e) {
 		// Left blank on purpose
+		
+	}
+
+	public static void setJumpLock(boolean b) {
+		jumpLock = b;
 		
 	}
 

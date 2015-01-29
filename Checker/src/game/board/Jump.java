@@ -18,7 +18,7 @@ public class Jump extends Action{
 				toJumpX = x + (deltaX / 2);
 				toJumpY = y + (deltaY / 2);
 				return true;
-			} else if (Character.toLowerCase(Board.currentBoard[y + modifier][x + (deltaX / 2)]) == otherTeam) {
+			} else if (deltaY * ((team == 'w') ? -1 : 1) == 2 && Character.toLowerCase(Board.currentBoard[y + modifier][x + (deltaX / 2)]) == otherTeam) {
 				toJumpX = x + (deltaX / 2);
 				toJumpY = y + (modifier);
 				return true;
