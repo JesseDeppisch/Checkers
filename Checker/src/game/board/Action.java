@@ -4,12 +4,14 @@ import game.Game;
 
 public abstract class Action {
 	
-	protected int x, y, x2, y2;
-	protected int deltaX, deltaY;
-	protected int modifier, modDeltaY;
-	protected char team, otherTeam;
-	protected boolean isKing;
-	private boolean successful;
+	protected int x, y, x2, y2;        // x and y coordinates for checker manipulations - the second tier are moving to (whereas first are moving from)
+	protected int deltaX, deltaY;      // change in x and y coordinates
+	protected int modifier, modDeltaY; // modifiers used for calculating checker manipulations by team (non-king checkers)
+	
+	protected char team, otherTeam;    // team of checker
+	
+	protected boolean isKing;          // The checker being manipulated is a king
+	private boolean successful;        // The action is theoretically successful
 	
 	public Action(int x, int y, int x2, int y2, boolean execute) {
 		// Set basic movement variables

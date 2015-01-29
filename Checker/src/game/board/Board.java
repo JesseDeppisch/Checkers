@@ -16,8 +16,8 @@ public class Board {
 			{ 'w', ' ', 'w', ' ', 'w', ' ', 'w', ' ' },
 			{ ' ', 'w', ' ', 'w', ' ', 'w', ' ', 'w' } };
 	
-	public static char[][] currentBoard;
-	public static char[][] lastBoard;
+	public static char[][] currentBoard; // The current state of the checkerboard
+	public static char[][] lastBoard;    // The last state of the checkerboard
 	
 	public static void createBoard() {
 		currentBoard = lastBoard = STARTING_BOARD;

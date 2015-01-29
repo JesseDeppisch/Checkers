@@ -18,17 +18,17 @@ import javax.swing.JPanel;
 
 public class Game extends JPanel implements MouseListener{
 	
-	private static int scoreRed,  scoreWhite;
-	private static int columnOffset, rowOffset;
-	private static int currentSelectedX, currentSelectedY;
-	private static int allowedX, allowedY; // TODO - maybe make this an int[2]
-	private static int[] toHighlight;
+	private static int scoreRed,  scoreWhite;              // Scorekeeping integers
+	private static int columnOffset, rowOffset;            // Offset of the board used for drawing outlines of checkers
+	private static int currentSelectedX, currentSelectedY; // Currently selected checker (highlighted checker) coordinates
+	private static int allowedX, allowedY;                 // jumpLock'd checker | TODO - maybe make this an int[2]
+	private static int[] toHighlight;                      // Checker to highlight
 	
-	private static boolean moving; // If player is moving a piece already
-	private static boolean jumpLock;
-	private static boolean highlightDebug;
+	private static boolean moving;                         // If player is moving a checker
+	private static boolean jumpLock;                       // If the game is jumpLocked
+	private static boolean highlightDebug;                 // If true, the highlightDebug is enabled | TODO - improve
 	
-	private static char turn;
+	private static char turn;                              // Team's turn - 'r' = red, 'w' = white
 	
 	public Game() {
 		addMouseListener(this);

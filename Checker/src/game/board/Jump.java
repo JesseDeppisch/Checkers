@@ -4,12 +4,11 @@ import game.Game;
 
 public class Jump extends Action{
 	
+	private int toJumpX, toJumpY; // Checker coordinates to jump
+	
 	public Jump(int x, int y, int x2, int y2, boolean execute) {
 		super(x, y, x2, y2, execute);
 	}
-
-	private int toJumpX;
-	private int toJumpY;
 
 	@Override
 	public boolean isLegal() {
