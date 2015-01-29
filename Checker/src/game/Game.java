@@ -35,6 +35,8 @@ public class Game extends JPanel implements MouseListener{
 	
 	private static char turn;
 	
+	private static int[] toHighlight;
+	
 	/**
 	 * Main method, do init stuff here
 	 */
@@ -71,6 +73,8 @@ public class Game extends JPanel implements MouseListener{
 		toJumpY = -1;
 		
 		turn = 'w';
+		
+		toHighlight = new int[2];
 		
 		// Init game loop
 		while (true) {
@@ -110,6 +114,26 @@ public class Game extends JPanel implements MouseListener{
 		
 		g.setColor(Color.BLACK);
 		
+		// Drawing the highlights
+		
+		if (toHighlight[0] != -1 && toHighlight[1] != -1) {
+			Graphics2D g2 = (Graphics2D)g;
+			g2.setColor(Color.YELLOW);
+			g2.setStroke(new BasicStroke(3));
+			g2.drawOval(toHighlight[0] * 60 + columnOffset - 1, toHighlight[1] * 60 - 1 + rowOffset, 48, 48);
+			g2.setColor(Color.BLACK);
+		}
+			
+		
+	}
+	
+	public static void highlight(int x, int y) {
+		toHighlight[0] = x;
+		toHighlight[1] = y;
+	}
+	
+	public void flushHighlight() {
+		toHighlight = new int[2];
 	}
 	
 	/**
@@ -181,9 +205,9 @@ public class Game extends JPanel implements MouseListener{
 		
 		// Basic preliminary checks for specific actions
 		if (Math.abs(deltaX) == 2 && Math.abs(deltaY) == 2) {
-			new Jump(x, y, x2, y2);
+			new Jump(x, y, x2, y2, true);
 		} else if (Math.abs(deltaX) == 1) {
-			new Movement(x, y, x2, y2);
+			new Movement(x, y, x2, y2, true);
 		}
 		
 		// score is updated in the action class (so no need to put that code here)

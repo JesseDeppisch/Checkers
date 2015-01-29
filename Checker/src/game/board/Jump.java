@@ -4,8 +4,8 @@ import game.Game;
 
 public class Jump extends Action{
 	
-	public Jump(int x, int y, int x2, int y2) {
-		super(x, y, x2, y2);
+	public Jump(int x, int y, int x2, int y2, boolean execute) {
+		super(x, y, x2, y2, execute);
 	}
 
 	private int toJumpX;
@@ -30,6 +30,7 @@ public class Jump extends Action{
 	@Override
 	public void execute() {
 		// do the move
+		Board.move(x, y, x2, y2, toJumpX, toJumpY);
 		
 		// Update the score
 		Game.updateScore(team);

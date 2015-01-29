@@ -2,6 +2,8 @@ package game.board;
 
 import game.Game;
 
+import java.awt.Color;
+
 public class Board {
 
 	public static final char[][] STARTING_BOARD = {
@@ -60,12 +62,20 @@ public class Board {
 			removeChecker(jumpedX, jumpedY);
 		}
 		
-		// TODO - check if another jump is possible
-				//	else
-		Game.setTurn((Game.getTurn() == 'r') ? 'w' : 'r');
+		
+		// Checks if another jump is possible, and if not, changes turn
+		for (int i = -2; i < 3; i+=2)
+			for (int i2 = -2; i2 < 3; i2+=2)
+				if ((x2 + i2) > 0 && (x2 + i2) < 8 && (y2 + i) > 0 && (y2 + i) < 8) {
+					if (!new Jump(x2, y2, x2 + i2, y2 + i, false).isSuccessful()) {
+						Game.setTurn((Game.getTurn() == 'r') ? 'w' : 'r');
+					} else {
+						System.out.println("ANOTHER MOVE IS POSSIBLE");
+					}
+				}
 	}
 	
-	public static void removeChecker(int x, int y) {
+	private static void removeChecker(int x, int y) {
 		Board.currentBoard[y][x] = ' ';
 	}
 	

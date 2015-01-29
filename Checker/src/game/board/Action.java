@@ -9,9 +9,9 @@ public abstract class Action {
 	protected int modifier, modDeltaY;
 	protected char team, otherTeam;
 	protected boolean isKing;
-	private boolean isSuccessful;
+	private boolean successful;
 	
-	public Action(int x, int y, int x2, int y2) {
+	public Action(int x, int y, int x2, int y2, boolean execute) {
 		
 		// Set basic movement variables
 		this.x = x;
@@ -33,11 +33,14 @@ public abstract class Action {
 		modDeltaY = deltaY * modifier;
 		
 		// Perform requested movement if it follows game rules
-		if (basicLegalityCheck() && isLegal()) {
+		if (basicLegalityCheck() && isLegal() && execute) {
 			execute();
-			isSuccessful = true;
 		} else {
 			failMessage();
+		}
+		
+		if (isLegal()) {
+			successful = true;
 		}
 	}
 	
@@ -58,7 +61,7 @@ public abstract class Action {
 	}
 	
 	public boolean isSuccessful() {
-		return isSuccessful;
+		return successful;
 	}
 	
 	public abstract boolean isLegal();
