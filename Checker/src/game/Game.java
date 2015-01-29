@@ -18,40 +18,25 @@ import javax.swing.JPanel;
 
 public class Game extends JPanel implements MouseListener{
 	
-	private static int scoreRed;
-	private static int scoreWhite;
-	
-	private static int columnOffset;
-	private static int rowOffset;
-	
+	private static int scoreRed,  scoreWhite;
+	private static int columnOffset, rowOffset;
 	private static int currentSelectedX, currentSelectedY;
-	
-	private static boolean moving; // If player is moving a piece already
-	
-	private static boolean mouseDown;
-	private static boolean isRunning;
-	
-	private static int toJumpX, toJumpY;
-	
-	private static char turn;
-	
+	private static int allowedX, allowedY; // TODO - maybe make this an int[2]
 	private static int[] toHighlight;
 	
+	private static boolean moving; // If player is moving a piece already
 	private static boolean jumpLock;
-	
 	private static boolean highlightDebug;
 	
-	public static int allowedX, allowedY;
-	
-	
-	/**
-	 * Main method, do init stuff here
-	 */
+	private static char turn;
 	
 	public Game() {
 		addMouseListener(this);
 	}
 	
+	/**
+	 * Main method - do initial stuff here
+	 */
 	public static void main(String[] args) throws InterruptedException, IOException {
 		JFrame frame = new JFrame("Checkers");
 		Game game = new Game();
@@ -64,21 +49,13 @@ public class Game extends JPanel implements MouseListener{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setFocusable(true);
 		
-		
 		Board.createBoard();
 		
 		columnOffset = 6;
 		rowOffset = 5;
 		
-		mouseDown = false;
-		isRunning = false;
-		
 		scoreRed = 0;
 		scoreWhite = 0;
-		
-		toJumpX = -1;
-		toJumpY = -1;
-		
 		turn = 'w';
 		
 		toHighlight = new int[2];
@@ -140,10 +117,13 @@ public class Game extends JPanel implements MouseListener{
 			g2.drawOval(toHighlight[0] * 60 + columnOffset - 1, toHighlight[1] * 60 - 1 + rowOffset, 48, 48);
 			g2.setColor(Color.BLACK);
 		}
-			
-		
 	}
 	
+	/**
+	 * Checker to highlight
+	 * @param x coordinate
+	 * @param y coordinate
+	 */
 	public static void highlight(int x, int y) {
 		toHighlight[0] = x;
 		toHighlight[1] = y;
@@ -154,7 +134,7 @@ public class Game extends JPanel implements MouseListener{
 	}
 	
 	/**
-	 * Draws the board
+	 * Draw the checkerboard
 	 */
 	private void drawBoard(Graphics g) {
 		for (int row = 0; row < 8; row++) {
@@ -195,7 +175,9 @@ public class Game extends JPanel implements MouseListener{
 			scoreWhite += 1;
 	}
 
-	
+	/**
+	 * Action on mouseclick
+	 */
 	public void mouseClicked(MouseEvent e) {
 		if (moving) {
 			int[] click = Board.getChecker(e.getX(), e.getY());
@@ -205,7 +187,6 @@ public class Game extends JPanel implements MouseListener{
 			currentSelectedX = currentSelected[0];
 			currentSelectedY = currentSelected[1];
 		}
-		
 		moving = !moving;
 	}
 	
@@ -229,6 +210,25 @@ public class Game extends JPanel implements MouseListener{
 		
 		// score is updated in the action class (so no need to put that code here)
 	}
+
+	/**
+	 * Set the state of the boolean that forces the next action to be a jump
+	 * @param b jumpLock state
+	 * @param x coordinate of checker to force to jump
+	 * @param y coordinate of checker to force to jump
+	 */
+	public static void setJumpLock(boolean b, int x, int y) {
+		jumpLock = b;
+	
+		if (x != -1 && y != -1) {
+			allowedX = x;
+			allowedY = y;
+		}
+	}
+	
+	public static boolean getJumpLock() {
+		return jumpLock;
+	}
 	
 	public static void setTurn(char t) {
 		turn = t;
@@ -237,7 +237,15 @@ public class Game extends JPanel implements MouseListener{
 	public static char getTurn() {
 		return turn;
 	}
-
+	
+	public static int getAllowedX() {
+		return allowedX;
+	}
+	
+	public static int getAllowedY() {
+		return allowedY;
+	}
+	
 	public void mouseEntered(MouseEvent arg0) {
 		// Left blank on purpose
 	}
@@ -252,28 +260,6 @@ public class Game extends JPanel implements MouseListener{
 
 	public void mouseReleased(MouseEvent e) {
 		// Left blank on purpose
-		
-	}
-
-	public static void setJumpLock(boolean b, int x, int y) {
-		jumpLock = b;
-	
-		if (x != -1 && y != -1) {
-			allowedX = x;
-			allowedY = y;
-		}
-	}
-	
-	public static boolean getJumpLock() {
-		return jumpLock;
-	}
-	
-	public static int getAllowedX() {
-		return allowedX;
-	}
-	
-	public static int getAllowedY() {
-		return allowedY;
 	}
 
 }

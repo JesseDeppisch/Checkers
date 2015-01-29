@@ -36,6 +36,9 @@ public class Board {
 		return toReturn; // array will always be size of 2 (x, y)
 	}
 	
+	/**
+	 * Undoes one move
+	 */
 	public static void undo() {
 		if (Board.currentBoard != Board.lastBoard) {
 			Board.currentBoard = Board.lastBoard;
@@ -44,7 +47,7 @@ public class Board {
 	}
 	
 	/**
-	 * Move a checker. 
+	 * Move a checker 
 	 * @param x moving from
 	 * @param y moving from
 	 * @param x2 moving to
@@ -88,12 +91,13 @@ public class Board {
 			Game.setTurn((Game.getTurn() == 'r') ? 'w' : 'r');
 		}
 		
-		
-		
-		
-		
 	}
 	
+	/**
+	 * Removes a checker from the checkerboard
+	 * @param x coordinate
+	 * @param y coordinate
+	 */
 	private static void removeChecker(int x, int y) {
 		Board.currentBoard[y][x] = ' ';
 	}
