@@ -1,36 +1,78 @@
 package game.board;
 
-public class Action {
+import game.Game;
 
-	public static void undo() {
-		if (Board.currentBoard != Board.lastBoard) {
-			Board.currentBoard = Board.lastBoard;
-			System.out.println("Undo successful!");
+public abstract class Action {
+	
+	protected int x, y, x2, y2;
+	protected int deltaX, deltaY;
+	protected int modifier, modDeltaY;
+	protected char team, otherTeam;
+	protected boolean isKing;
+	private boolean successful;
+	
+	public Action(int x, int y, int x2, int y2, boolean execute) {
+		
+		// Set basic movement variables
+		this.x = x;
+		this.y = y;
+		this.x2 = x2;
+		this.y2 = y2;
+
+		deltaX = x2 - x;
+		deltaY = y2 - y;
+		
+		if (Board.currentBoard[y][x] == 'R' || Board.currentBoard[y][x] == 'W')
+			isKing = true;
+		
+		// Set team variables for ease of access later
+		team = Character.toLowerCase(Board.currentBoard[y][x]);
+		otherTeam = (team == 'r') ? 'w' : 'r';
+		
+		modifier = (team == 'r') ? 1 : -1;
+		modDeltaY = deltaY * modifier;
+		
+		// Perform requested movement if it follows game rules
+		if (basicLegalityCheck() && isLegal() && execute) {
+			execute();
+		} else {
+			failMessage();
+		}
+		
+		if (isLegal()) {
+			successful = true;
 		}
 	}
 	
-	/**
-	 * Move a checker. 
-	 * @param x moving from
-	 * @param y moving from
-	 * @param x2 moving to
-	 * @param y2 moving to
-	 * @param jumpedX jumped piece (-1 if none)
-	 * @param jumpedY jumped piece (-1 if none)
-	 */
-	public static void move(int x, int y, int x2, int y2, int jumpedX, int jumpedY) {
-		Board.lastBoard = Board.currentBoard;
+	protected boolean basicLegalityCheck() {
+		// Check that a piece is selected
+		if (Board.currentBoard[y][x] == ' ') 
+			return false;
 		
-		Board.currentBoard[y2][x2] = Board.currentBoard[y][x];
-		Board.currentBoard[y][x] = ' ';
+		// Check that target location isn't occupuied
+		if  (Board.currentBoard[y2][x2] != ' ')
+			return false;
 		
-		if (jumpedX != -1 & jumpedY != -1) {
-			removeChecker(jumpedX, jumpedY);
-		}
+		// Check that piece to transform is team's turn
+		if (Game.getTurn() != team)
+			return false;
+		
+		return true;
 	}
 	
-	public static void removeChecker(int x, int y) {
-		Board.currentBoard[y][x] = ' ';
+	public boolean isSuccessful() {
+		return successful;
+	}
+	
+	public abstract boolean isLegal();
+	
+	public abstract void execute();
+	
+	protected abstract String getActionName();
+	
+	public void failMessage() {
+		String actionName = getActionName();
+		System.out.printf("Failed execution: %S\n\tx:%d y:%d\n\tx2:%d y2:%d\n", actionName, x, y, x2, y2);
 	}
 	
 }
