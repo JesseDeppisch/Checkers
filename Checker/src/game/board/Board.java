@@ -77,14 +77,14 @@ public class Board {
 			}
 			
 			if (!canJumpAgain) {
-				Game.setJumpLock(false);
+				Game.setJumpLock(false, -1, -1);
 				Game.setTurn((Game.getTurn() == 'r') ? 'w' : 'r');
 			} else {
 				System.out.println("Can jump again!");
-				Game.setJumpLock(true);
+				Game.setJumpLock(true, x2, y2);
 			}
 		} else {
-			Game.setJumpLock(false);
+			Game.setJumpLock(false, -1, -1);
 			Game.setTurn((Game.getTurn() == 'r') ? 'w' : 'r');
 		}
 		
