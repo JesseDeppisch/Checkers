@@ -35,27 +35,35 @@ public abstract class Action {
 		// Perform requested movement if it follows game rules
 		if (basicLegalityCheck() && isLegal() && execute) {
 			execute();
-		} else {
+		} else if (execute){
 			failMessage();
 		}
 		
-		if (isLegal()) {
+		if (basicLegalityCheck() && isLegal()) {
 			successful = true;
 		}
 	}
 	
 	protected boolean basicLegalityCheck() {
-		// Check that a piece is selected
-		if (Board.currentBoard[y][x] == ' ') 
+		// Check that attempted move is within bounds
+		if (!(x2>-1 && x2<8 && y2>-1 && y2<8)) {
 			return false;
+		}
+			
+		// Check that a piece is selected
+		if (Board.currentBoard[y][x] == ' ') {
+			return false;
+		}
 		
 		// Check that target location isn't occupuied
-		if  (Board.currentBoard[y2][x2] != ' ')
+		if  (Board.currentBoard[y2][x2] != ' ') {
 			return false;
+		}
 		
 		// Check that piece to transform is team's turn
-		if (Game.getTurn() != team)
+		if (Game.getTurn() != team) {
 			return false;
+		}
 		
 		return true;
 	}
