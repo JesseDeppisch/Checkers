@@ -14,7 +14,7 @@ public abstract class Action {
 	private boolean successful;        // The action is theoretically successful
 	
 	public Action(int x, int y, int x2, int y2, boolean execute) {
-		// Set basic movement variables
+		/* Initialze variables */
 		this.x = x;
 		this.y = y;
 		this.x2 = x2;
@@ -26,20 +26,20 @@ public abstract class Action {
 		if (Board.currentBoard[y][x] == 'R' || Board.currentBoard[y][x] == 'W')
 			isKing = true;
 		
-		// Set team variables for ease of access later
 		team = Character.toLowerCase(Board.currentBoard[y][x]);
 		otherTeam = (team == 'r') ? 'w' : 'r';
 		
 		modifier = (team == 'r') ? 1 : -1;
 		modDeltaY = deltaY * modifier;
 		
-		// Perform requested movement if it follows game rules
+		/* Perform requested movement if it follows game rules */
 		if (basicLegalityCheck() && isLegal() && execute) {
 			execute();
 		} else if (execute){
 			failMessage();
 		}
 		
+		/* If an action is not supposed to be executed, check that it would be theoretically successful */
 		if (basicLegalityCheck() && isLegal()) {
 			successful = true;
 		}
@@ -50,22 +50,22 @@ public abstract class Action {
 	 * @return legality
 	 */
 	protected boolean basicLegalityCheck() {
-		// Check that attempted move is within bounds
+		/* Check that attempted move is within bounds */
 		if (!(x2>-1 && x2<8 && y2>-1 && y2<8)) {
 			return false;
 		}
 			
-		// Check that a piece is selected
+		/* Check that a piece is selected */
 		if (Board.currentBoard[y][x] == ' ') {
 			return false;
 		}
 		
-		// Check that target location isn't occupuied
+		/* Check that target location isn't occupuied */
 		if  (Board.currentBoard[y2][x2] != ' ') {
 			return false;
 		}
 		
-		// Check that piece to transform is team's turn
+		/* Check that piece to transform is team's turn */
 		if (Game.getTurn() != team) {
 			return false;
 		}
