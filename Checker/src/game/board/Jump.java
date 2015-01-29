@@ -13,6 +13,10 @@ public class Jump extends Action{
 
 	@Override
 	public boolean isLegal() {
+		if (Game.getJumpLock() && (x != Game.getAllowedX() || y != Game.getAllowedY())) {
+			return false;
+		}
+		
 		if (Math.abs(deltaX) == 2 && Math.abs(deltaY) == 2) {
 			if (isKing && Character.toLowerCase(Board.currentBoard[y + (deltaY / 2)][x + (deltaX / 2)]) == otherTeam) {
 				toJumpX = x + (deltaX / 2);

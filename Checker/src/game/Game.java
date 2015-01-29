@@ -41,6 +41,9 @@ public class Game extends JPanel implements MouseListener{
 	
 	private static boolean highlightDebug;
 	
+	public static int allowedX, allowedY;
+	
+	
 	/**
 	 * Main method, do init stuff here
 	 */
@@ -115,13 +118,13 @@ public class Game extends JPanel implements MouseListener{
 		if (turn == 'r') {
 			g.setColor(Color.RED);
 			if (!jumpLock)
-				g.drawString("Turn: RED", 370, 508);
+				g.drawString("Turn: RED", 360, 508);
 			else
 				g.drawString("Turn: RED - JUMP", 370, 508);
 		} else if (turn == 'w') {
 			g.setColor(Color.GRAY);
 			if (!jumpLock)
-				g.drawString("Turn: WHITE", 370, 508);
+				g.drawString("Turn: WHITE", 360, 508);
 			else
 				g.drawString("Turn: WHITE - JUMP", 370, 508);
 		}
@@ -225,9 +228,6 @@ public class Game extends JPanel implements MouseListener{
 		}
 		
 		// score is updated in the action class (so no need to put that code here)
-		
-		// TODO - check if another jump is possible || ALSO DOING THIS IN BOARD class, so probably keep there (under move())
-		//	else
 	}
 	
 	public static void setTurn(char t) {
@@ -255,9 +255,25 @@ public class Game extends JPanel implements MouseListener{
 		
 	}
 
-	public static void setJumpLock(boolean b) {
+	public static void setJumpLock(boolean b, int x, int y) {
 		jumpLock = b;
-		
+	
+		if (x != -1 && y != -1) {
+			allowedX = x;
+			allowedY = y;
+		}
+	}
+	
+	public static boolean getJumpLock() {
+		return jumpLock;
+	}
+	
+	public static int getAllowedX() {
+		return allowedX;
+	}
+	
+	public static int getAllowedY() {
+		return allowedY;
 	}
 
 }
